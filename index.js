@@ -1,6 +1,6 @@
 var express = require('express');
 var app = express();
-var config = req("config.json");
+var config = require('./config.json');
 
 app.set('port', (process.env.PORT || 5000));
 
