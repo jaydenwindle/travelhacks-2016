@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json({ verify: verifyRequestSignature }));
+app.use(bodyParser.json());
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');
