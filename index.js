@@ -43,11 +43,10 @@ function getProfile(id, callback) {
             fields: 'first_name, last_name, profile_pic, locale, timezone, gender',
             access_token: process.env.page_token,
         }
-    }, function (err, resp, body) {
-        ret = callback(body);
+    }, function (err, resp, profile) {
+        console.log("getProfile: " + ret);
+        callback(profile);
     });
-    console.log("getProfile: " + ret);
-    return ret;
 }
 
 // Wit.ai Actions
@@ -62,8 +61,11 @@ var actions = {
         cb();
     },
     merge(sessionId, context, entities, message, cb){
-        console.log(sessionId, context, entities, message);
-        cb(context);
+        getProfile(sessions[sessionId].id, function (profile) {
+            context.profile = profile;
+            console.log(sessionId, context, entities, message);
+            cb(context);
+        })
     },
     error(sessionId, context, error){
         console.log(error);
@@ -119,7 +121,6 @@ app.post('/webhook', function(req, res) {
                     message = messagingEvent.message.text;
                     atts = messagingEvent.attachments;
                     
-                    console.log(sessionId, message, sessions[sessionId].context);
                     witClient.runActions(sessionId, message, sessions[sessionId].context, function (error, context) {
                         if (error) {
                             console.log(error);
