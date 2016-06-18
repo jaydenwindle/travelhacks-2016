@@ -31,13 +31,25 @@ function getSessionId(userId) {
         sessions[sessionId] = {
             id: userId,
             context: {
-                _fbinfo: message.getProfile(userId, function (body) {
+                _fbinfo: getProfile(userId, function (body) {
                     return JSON.parse(body);
                 })
             }
         }
     }
     return sessionId;
+}
+
+function getProfile(id, callback) {
+    request.get({
+        uri: 'https://graph.facebook.com/v2.6/' + id,
+        qs: {
+            fields: 'first_name, last_name, profile_pic, locale, timezone, gender',
+            access_token: process.env.page_token,
+        }
+    }, function (err, resp, body) {
+        callback(body);
+    });
 }
 
 // Wit.ai Actions
@@ -113,12 +125,6 @@ app.post('/webhook', function(req, res) {
                         } else {
                             console.log("Finished actions");
                         }
-                    });
-
-                    message.getProfile(id, function (body) {
-                        var profileInfo = JSON.parse(body);
-                        console.log(profileInfo);
-                        message.send(id, "Hello " + profileInfo.first_name + "!"); 
                     });
 
                 } else if (messagingEvent.delivery) {

@@ -39,19 +39,7 @@ function callSendAPI(messageData) {
     });  
 }
 
-function getProfile(id, callback) {
-    request.get({
-        uri: 'https://graph.facebook.com/v2.6/' + id,
-        qs: {
-            fields: 'first_name, last_name, profile_pic, locale, timezone, gender',
-            access_token: process.env.page_token,
-        }
-    }, function (err, resp, body) {
-        callback(body);
-    });
-}
 
 module.exports = {
     send:  send,
-    getProfile: getProfile
 }
