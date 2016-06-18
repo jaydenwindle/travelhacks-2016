@@ -28,9 +28,42 @@ app.get('/webhook', function(req, res) {
 });
 
 app.post('/webhook', function(req, res) {
-    console.log(JSON.stringify(req.body));
+    var data = req.body;
 
-    res.sendStatus(200);
+    // Make sure this is a page subscription
+    if (data.object == 'page') {
+        // Iterate over each entry
+        // There may be multiple if batched
+        data.entry.forEach(function(pageEntry) {
+            var pageID = pageEntry.id;
+            var timeOfEvent = pageEntry.time;
+
+            // Iterate over each messaging event
+            pageEntry.messaging.forEach(function(messagingEvent) {
+            if (messagingEvent.optin) {
+                console.log("Recieved Auth: " + JSON.stringify(messagingEvent));
+                //receivedAuthentication(messagingEvent);
+            } else if (messagingEvent.message) {
+                console.log("Recieved Message: " + JSON.stringify(messagingEvent));
+                //receivedMessage(messagingEvent);
+            } else if (messagingEvent.delivery) {
+                console.log("Recieved Delivery: " + JSON.stringify(messagingEvent));
+                //receivedDeliveryConfirmation(messagingEvent);
+            } else if (messagingEvent.postback) {
+                console.log("Recieved Postback: " + JSON.stringify(messagingEvent));
+                //receivedPostback(messagingEvent);
+            } else {
+                console.log("Webhook received unknown messagingEvent: ", messagingEvent);
+            }
+            });
+        });
+
+        // Assume all went well.
+        //
+        // You must send back a 200, within 20 seconds, to let us know you've 
+        // successfully received the callback. Otherwise, the request will time out.
+        res.sendStatus(200);
+    }
 });
 
 app.listen(app.get('port'), function() {
