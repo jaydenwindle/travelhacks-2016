@@ -30,6 +30,7 @@ function getSessionId(userId) {
         sessionId = new Date().toISOString();
         sessions[sessionId] = {
             id: userId,
+            context: {}
         }
     }
     return sessionId;
