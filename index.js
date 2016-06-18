@@ -43,6 +43,7 @@ app.post('/webhook', function(req, res) {
             pageEntry.messaging.forEach(function(messagingEvent) {
             if (messagingEvent.optin) {
                 console.log("Recieved Auth: " + JSON.stringify(messagingEvent));
+                message.send(messagingEvent.sender.id, "Hello there!");
                 //receivedAuthentication(messagingEvent);
             } else if (messagingEvent.message) {
                 console.log("Recieved Message: " + JSON.stringify(messagingEvent));
