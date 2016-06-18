@@ -51,7 +51,7 @@ app.post('/webhook', function(req, res) {
                 message.getProfile(id, function (body) {
                     var profileInfo = JSON.parse(body);
                     console.log(profileInfo);
-                    message.send(id, "Hello " + profileInfo.first_name + "!");
+                    message.send(id, "Hello " + profileInfo.first_name + "!"); 
                 })
                 //receivedMessage(messagingEvent);
             } else if (messagingEvent.delivery) {
