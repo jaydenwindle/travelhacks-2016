@@ -28,8 +28,8 @@ app.get('/webhook', function(req, res) {
 });
 
 app.post('/webhook', function(req, res) {
-    console.log(req.body);
-    res.send(200);
+    console.log(req.body.messaging);
+    res.sendStatus(200);
 });
 
 app.listen(app.get('port'), function() {
