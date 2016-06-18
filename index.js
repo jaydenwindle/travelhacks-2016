@@ -28,12 +28,13 @@ function getSessionId(userId) {
     });
     if (!sessionId) {
         sessionId = new Date().toISOString();
+        profile = getProfile(userId, function (body) {
+            return JSON.parse(body);
+        });
         sessions[sessionId] = {
             id: userId,
             context: {
-                _fbinfo: getProfile(userId, function (body) {
-                    return JSON.parse(body);
-                })
+                _fbinfo: profile,
             }
         }
     }
@@ -41,6 +42,7 @@ function getSessionId(userId) {
 }
 
 function getProfile(id, callback) {
+    var ret;
     request.get({
         uri: 'https://graph.facebook.com/v2.6/' + id,
         qs: {
@@ -48,8 +50,9 @@ function getProfile(id, callback) {
             access_token: process.env.page_token,
         }
     }, function (err, resp, body) {
-        callback(body);
+        ret = callback(body);
     });
+    return ret;
 }
 
 // Wit.ai Actions
