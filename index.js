@@ -46,6 +46,7 @@ function getProfile(id, callback) {
     }, function (err, resp, body) {
         ret = callback(body);
     });
+    console.log("getProfile: " + ret);
     return ret;
 }
 
