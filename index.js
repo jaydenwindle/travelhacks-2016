@@ -26,6 +26,7 @@ app.get('/webhook', function(req, res) {
 });
 
 app.post('/webhook', function(req, res) {
+    console.log(req.body);
     var data = req.body;
 
     // Make sure this is a page subscription
