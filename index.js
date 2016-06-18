@@ -46,7 +46,7 @@ function getProfile(id, callback) {
         }
     }, function (err, resp, profile) {
         console.log("getProfile: " + ret);
-        callback(profile);
+        callback(JSON.parse(profile));
     });
 }
 
