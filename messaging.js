@@ -18,8 +18,7 @@ function send(recipientId, messageText) {
 function callSendAPI(messageData) {
     request({
         uri: 'https://graph.facebook.com/v2.6/me/messages',
-        // TODO: remove hardcoded token
-        qs: { access_token: config.page_token },
+        qs: { access_token: process.env.page_token },
         method: 'POST',
         json: messageData
 
@@ -45,7 +44,7 @@ function getProfile(id, callback) {
         uri: 'https://graph.facebook.com/v2.6/' + id,
         qs: {
             fields: 'first_name, last_name, profile_pic, locale, timezone, gender',
-            access_token: config.page_token,
+            access_token: process.env.page_token,
         }
     }, function (err, resp, body) {
         callback(body);

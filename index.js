@@ -4,20 +4,42 @@ var config = require('./config.json');
 var bodyParser = require('body-parser');
 var message = require('./messaging.js');
 var request = require('request');
+var Wit = require('node-wit').Wit;
 
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
-
-// views is directory for all template files
+ 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
+// Stores all active sessions
+var sessions = {}
+
+// Wit.ai Actions
+var actions = {
+    say(){
+        
+    },
+    merge(){
+        
+    },
+    error(){
+        
+    }
+}
+
+// Sets up wit
+var client = new Wit(process.env.wit_token, actions);
+
+
+// Home Page
 app.get('/', function(request, response) {
     response.send("Welcome to Chiri");
 });
 
+// Let's facebook verify our app
 app.get('/webhook', function(req, res) {
     if (req.query['hub.mode'] === 'subscribe' &&
       req.query['hub.verify_token'] === config.webhook_token) {
@@ -29,6 +51,7 @@ app.get('/webhook', function(req, res) {
     }  
 });
 
+// Main message processing
 app.post('/webhook', function(req, res) {
     var data = req.body;
 
@@ -42,27 +65,35 @@ app.post('/webhook', function(req, res) {
 
             // Iterate over each messaging event
             pageEntry.messaging.forEach(function(messagingEvent) {
-            if (messagingEvent.optin) {
-                console.log("Recieved Auth: " + JSON.stringify(messagingEvent));
-                //receivedAuthentication(messagingEvent);
-            } else if (messagingEvent.message) {
-                console.log("Recieved Message: " + JSON.stringify(messagingEvent));
-                var id = messagingEvent.sender.id;
-                message.getProfile(id, function (body) {
-                    var profileInfo = JSON.parse(body);
-                    console.log(profileInfo);
-                    message.send(id, "Hello " + profileInfo.first_name + "!"); 
-                })
-                //receivedMessage(messagingEvent);
-            } else if (messagingEvent.delivery) {
-                console.log("Recieved Delivery: " + JSON.stringify(messagingEvent));
-                //receivedDeliveryConfirmation(messagingEvent);
-            } else if (messagingEvent.postback) {
-                console.log("Recieved Postback: " + JSON.stringify(messagingEvent));
-                //receivedPostback(messagingEvent);
-            } else {
-                console.log("Webhook received unknown messagingEvent: ", messagingEvent);
-            }
+                if (messagingEvent.optin) {
+
+                    // User Authenticated to our bot
+                    console.log("Recieved Auth: " + JSON.stringify(messagingEvent));
+
+                } else if (messagingEvent.message) {
+
+                    // Recieved a message 
+                    console.log("Recieved Message: " + JSON.stringify(messagingEvent));
+                    var id = messagingEvent.sender.id;
+                    message.getProfile(id, function (body) {
+                        var profileInfo = JSON.parse(body);
+                        console.log(profileInfo);
+                        message.send(id, "Hello " + profileInfo.first_name + "!"); 
+                    });
+
+                } else if (messagingEvent.delivery) {
+                    // Message sent successfully
+                    console.log("Recieved Delivery: " + JSON.stringify(messagingEvent));
+
+                } else if (messagingEvent.postback) {
+
+                    // User clicked a button on a formatted message
+                    console.log("Recieved Postback: " + JSON.stringify(messagingEvent));
+                
+                } else {
+                    // some error
+                    console.log("Webhook received unknown messagingEvent: ", messagingEvent);
+                }
             });
         });
 
