@@ -28,15 +28,14 @@ function getSessionId(userId) {
     });
     if (!sessionId) {
         sessionId = new Date().toISOString();
-        profile = getProfile(userId, function (body) {
-            return JSON.parse(body);
-        });
-        sessions[sessionId] = {
-            id: userId,
-            context: {
-                _fbinfo: profile,
+        getProfile(userId, function (body) {
+            sessions[sessionId] = {
+                id: userId,
+                context: {
+                    _fbinfo: JSON.parse(body),
+                }
             }
-        }
+        });
     }
     return sessionId;
 }
