@@ -1,4 +1,5 @@
 var request = require('request');
+var config = require('./config.json');
 
 function send(recipientId, messageText) {
 	var messageData = {
@@ -18,7 +19,7 @@ function callSendAPI(messageData) {
     request({
         uri: 'https://graph.facebook.com/v2.6/me/messages',
         // TODO: remove hardcoded token
-        qs: { access_token: 'EAAS02wu2ZB1ABAPaGBfvhvfJCcv0dfwE1tgliP8fz1Utzbm6NTd0rymSX5pRHyfrPlxbmQqTzpVyFXzNuc4l0qKvnYAIfqSm4qFrJLPmLEOcVBbN3uwoCDcqaGvlsUSRFzAJupkYwMjBvAHdtUJmL3UXEQZBS5aXFxuiVrcgZDZD' },
+        qs: { access_token: config.page_token },
         method: 'POST',
         json: messageData
 
@@ -37,6 +38,17 @@ function callSendAPI(messageData) {
     }, function (err, resp, body) {
         console.log(body);
     });  
+}
+
+function getProfileInfo(id, callback) {
+    request.get({
+        uri: 'https://graph.facebook.com/v2.6/' + id,
+        qs: {
+            fields: [first_name, last_name, profile_pic, locale, timezone, gender],
+            access_token: config.page_token
+        }
+    });
+    callback();
 }
 
 module.exports = {
