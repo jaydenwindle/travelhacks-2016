@@ -117,6 +117,7 @@ app.post('/webhook', function(req, res) {
                     message = messagingEvent.message.text;
                     atts = messagingEvent.attachments;
                     
+                    console.log(sessionId, message, sessions[sessionId].context);
                     witClient.runActions(sessionId, message, sessions[sessionId].context, function (error, context) {
                         if (error) {
                             console.log(error);
