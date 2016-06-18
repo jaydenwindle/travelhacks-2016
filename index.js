@@ -58,6 +58,7 @@ var actions = {
         } else {
             console.log('Wit say error');
         }
+        cb();
     },
     merge(sessionId, context, entities, message, cb){
         console.log(sessionId, context, entities, message);
