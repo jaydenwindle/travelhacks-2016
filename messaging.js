@@ -53,5 +53,5 @@ function getProfile(id, callback) {
 
 module.exports = {
     send:  send,
-    getProfile: getProfile,
+    getProfile: getProfile
 }
