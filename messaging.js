@@ -47,7 +47,7 @@ function getProfile(id, callback) {
             fields: 'first_name, last_name, profile_pic, locale, timezone, gender',
             access_token: config.page_token,
         }
-    }, callback(err, resp, body) );
+    }, callback(body));
 }
 
 module.exports = {
