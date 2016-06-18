@@ -2,7 +2,6 @@ var request = require('request');
 var config = require('./config.json');
 
 function send(recipientId, messageText) {
-    getProfileInfo(recipientId);
 	var messageData = {
 		recipient: {
 			id: recipientId
@@ -37,22 +36,21 @@ function callSendAPI(messageData) {
             console.error(error);
         }
     }, function (err, resp, body) {
-        console.log(JSON.stringify(body));
+        console.log(body);
     });  
 }
 
-function getProfileInfo(id) {
+function getProfileInfo(id, callback) {
     request.get({
         uri: 'https://graph.facebook.com/v2.6/' + id,
         qs: {
             fields: 'first_name, last_name, profile_pic, locale, timezone, gender',
             access_token: config.page_token
         }
-    }, function (err, resp, body) {
-        console.log(JSON.stringify(body));
-    });
+    }, callback(err, resp, body));
 }
 
 module.exports = {
     send:  send,
+    getProfileInfo: getProfileInfo,
 }
