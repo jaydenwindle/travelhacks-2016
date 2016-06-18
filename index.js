@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var config = require('./config.json');
 var bodyParser = require('body-parser');
+var message = require('./messaging.js');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -45,6 +46,7 @@ app.post('/webhook', function(req, res) {
                 //receivedAuthentication(messagingEvent);
             } else if (messagingEvent.message) {
                 console.log("Recieved Message: " + JSON.stringify(messagingEvent));
+                
                 //receivedMessage(messagingEvent);
             } else if (messagingEvent.delivery) {
                 console.log("Recieved Delivery: " + JSON.stringify(messagingEvent));
