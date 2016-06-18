@@ -37,7 +37,7 @@ function callSendAPI(messageData) {
             console.error(error);
         }
     }, function (err, resp, body) {
-        console.log(body);
+        console.log(JSON.stringify(body));
     });  
 }
 
@@ -49,7 +49,7 @@ function getProfileInfo(id) {
             access_token: config.page_token
         }
     }, function (err, resp, body) {
-        console.log(body);
+        console.log(JSON.stringify(body));
     });
 }
 
