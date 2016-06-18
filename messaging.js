@@ -40,7 +40,7 @@ function callSendAPI(messageData) {
     });  
 }
 
-function getProfileInfo(id, callback) {
+function getProfile(id, callback) {
     request.get({
         uri: 'https://graph.facebook.com/v2.6/' + id,
         qs: {
@@ -52,5 +52,5 @@ function getProfileInfo(id, callback) {
 
 module.exports = {
     send:  send,
-    getProfileInfo: getProfileInfo,
+    getProfile: getProfile,
 }
