@@ -31,7 +31,7 @@ function getSessionId(userId) {
         sessions[sessionId] = {
             id: userId,
             context: {
-                _fbinfo: getProfile(userId, function (body) {
+                _fbinfo: message.getProfile(userId, function (body) {
                     return JSON.parse(body);
                 })
             }
