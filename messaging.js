@@ -38,3 +38,7 @@ function callSendAPI(messageData) {
         console.log(body);
     });  
 }
+
+module.exports = {
+    send:  send,
+}
