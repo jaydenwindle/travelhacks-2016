@@ -45,7 +45,7 @@ function getProfile(id, callback) {
             access_token: process.env.page_token,
         }
     }, function (err, resp, profile) {
-        console.log("getProfile: " + ret);
+        console.log("getProfile: " + profile);
         callback(JSON.parse(profile));
     });
 }
@@ -53,7 +53,7 @@ function getProfile(id, callback) {
 // Wit.ai Actions
 var actions = {
     say(sessionId, context, message, cb){
-        id = context.id;
+        id = sessions[sessionId].id;
         if (id) {
             message.send(id, message);
         } else {
