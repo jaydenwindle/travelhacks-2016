@@ -22,5 +22,8 @@
     "heroku",
     "express"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "mongoose": "^4.5.0"
+  }
 }
