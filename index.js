@@ -15,23 +15,51 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 // Stores all active sessions
+// sessionID: { id:  FB_USER_ID, context: WIT_CONTEXT }
 var sessions = {}
+
+function getSessionId(userId) {
+    var sessionId;
+
+    Object.keys(sessions).forEach(function (s) {
+        if (sessions[s] == userId) {
+            sessionId = s;
+        }
+    });
+    if (!sessionId) {
+        sessionId = new Date().toISOString();
+        sessions[sessionId] = {
+            id: userId,
+            context: {
+                _fbinfo: getProfile(userId, function (body) {
+                    return JSON.parse(body);
+                });
+            }
+        }
+    }
+    return sessionId;
+}
 
 // Wit.ai Actions
 var actions = {
-    say(){
-        
+    say(sessionId, context, message, cb){
+        id = context.id;
+        if (id) {
+            message.send(id, message);
+        } else {
+            console.log('Wit say error');
+        }
     },
-    merge(){
-        
+    merge(sessionId, context, entities, message, cb){
+        console.log(sessionId, context, entities, message);
     },
-    error(){
-        
+    error(sessionId, context, error){
+        console.log(error);
     }
 }
 
 // Sets up wit
-var client = new Wit(process.env.wit_token, actions);
+var witClient = new Wit(process.env.wit_token, actions);
 
 
 // Home Page
@@ -42,7 +70,7 @@ app.get('/', function(request, response) {
 // Let's facebook verify our app
 app.get('/webhook', function(req, res) {
     if (req.query['hub.mode'] === 'subscribe' &&
-      req.query['hub.verify_token'] === config.webhook_token) {
+      req.query['hub.verify_token'] === process.env.webhook_token) {
         console.log("Validating webhook");
         res.status(200).send(req.query['hub.challenge']);
     } else {
@@ -75,6 +103,18 @@ app.post('/webhook', function(req, res) {
                     // Recieved a message 
                     console.log("Recieved Message: " + JSON.stringify(messagingEvent));
                     var id = messagingEvent.sender.id;
+                    sessionId = getSessionId(id);
+                    message = messagingEvent.message.text;
+                    atts = messagingEvent.attachments;
+                    
+                    witClient.runActions(sessionId, message, sessions[sessionId].context, function (error, context) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log("Finished actions");
+                        }
+                    });
+
                     message.getProfile(id, function (body) {
                         var profileInfo = JSON.parse(body);
                         console.log(profileInfo);
