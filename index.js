@@ -33,7 +33,7 @@ function getSessionId(userId) {
             context: {
                 _fbinfo: getProfile(userId, function (body) {
                     return JSON.parse(body);
-                });
+                })
             }
         }
     }
