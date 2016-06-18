@@ -155,12 +155,30 @@
 						<p class="txt-md">Your Ultimate Travel Guide</p>
 					</div>
 					<div class="app-availability no-padding">
+						<script>
+						  window.fbAsyncInit = function() {
+						    FB.init({
+						      appId      : '1324752794221392',
+						      xfbml      : true,
+						      version    : 'v2.6'
+						    });
+						  };
+
+						  (function(d, s, id){
+						     var js, fjs = d.getElementsByTagName(s)[0];
+						     if (d.getElementById(id)) {return;}
+						     js = d.createElement(s); js.id = id;
+						     js.src = "//connect.facebook.net/en_US/sdk.js";
+						     fjs.parentNode.insertBefore(js, fjs);
+						   }(document, 'script', 'facebook-jssdk'));
+						</script>
+
+						
 						
 						<div class="col-lg-4 col-md-4 col-sm-6 visible-lg visible-md visible-sm">
-					<!--Device Container-->
-					<img src="img/landing/fbChiri.jpg" class="img-responsive" alt="">
-					<!--/Device Container-->
-				</div>
+							<div class="fb-messengermessageus" messenger_app_id="1324752794221392" page_id="1218726841513651" color="blue"size="standard"></div>
+							<!--/Device Container-->
+						</div>
 						
 					</div>
 				</div>
