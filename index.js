@@ -11,7 +11,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 app.get('/', function(request, response) {
-    return "Welcome to Chiri";
+    response.send("Welcome to Chiri");
 });
 
 app.get('/webhook', function(req, res) {
