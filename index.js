@@ -3,6 +3,7 @@ var app = express();
 var config = require('./config.json');
 var bodyParser = require('body-parser');
 var message = require('./messaging.js');
+var request = require('request');
 
 app.set('port', (process.env.PORT || 5000));
 

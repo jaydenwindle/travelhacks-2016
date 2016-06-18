@@ -1,3 +1,5 @@
+var request = require('request');
+
 function send(recipientId, messageText) {
 	var messageData = {
 		recipient: {
@@ -8,6 +10,7 @@ function send(recipientId, messageText) {
 		}
 	};
 
+    console.log('Calling send api');
 	callSendAPI(messageData);
 }
 
@@ -31,5 +34,7 @@ function callSendAPI(messageData) {
             console.error(response);
             console.error(error);
         }
+    }, function (err, resp, body) {
+        console.log(body);
     });  
 }
