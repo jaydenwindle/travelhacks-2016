@@ -49,8 +49,9 @@ app.post('/webhook', function(req, res) {
                 console.log("Recieved Message: " + JSON.stringify(messagingEvent));
                 var id = messagingEvent.sender.id;
                 message.getProfile(id, function (body) {
-                    console.log(JSON.parse(body));
-                    message.send(id, "Hello " + body.first_name + "!");
+                    var profileInfo = JSON.parse(body);
+                    console.log(profileInfo);
+                    message.send(id, "Hello " + profileInfo.first_name + "!");
                 })
                 //receivedMessage(messagingEvent);
             } else if (messagingEvent.delivery) {
