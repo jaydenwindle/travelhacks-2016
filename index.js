@@ -67,7 +67,7 @@ var actions = {
     },
     merge(sessionId, context, entities, message, cb){
         console.log(sessionId, context, entities, message);
-        cb();
+        cb(context);
     },
     error(sessionId, context, error){
         console.log(error);
