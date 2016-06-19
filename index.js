@@ -62,7 +62,7 @@ app.post('/aihook', function (req, res) {
             console.log(result)
             if (!result.actionIncomplete) {
                 console.log('Adding new guide');
-                var newGuide = new controller.Guide({city: result.parameters['geo-city'], userName: "Test"});
+                var newGuide = new controller.Guide({city: result.parameters['geo-city'], userName: profile.name});
                 newGuide.save(function (err, guide) {
                     console.log(guide);
                     if (!err) {
