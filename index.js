@@ -139,10 +139,10 @@ app.post('/aihook', function (req, res) {
                 controller.Activity.find({city: result.parameters.city}, function (err, activities) {
                     console.log(activities);
                     if (activities.length > 0) {
-                        result.fulfillment.speech = 'Guides recommend the following activities in ' + result.parameters.city + '\n';
+                        result.fulfillment.speech = 'Guides recommend the following activities in ' + result.parameters.city + '\n\n';
                         activities.forEach(function (act) {
                             console.log(act);
-                            result.fulfillment.speech += act.name + '\n' + 'Location: ' + act.address + '\n' + 'Time: ' + act['date-time'];
+                            result.fulfillment.speech += act.name + '\n' + 'Location: ' + act.address + '\n' + 'Time: ' + act['date-time'] + '\n\n';
                         });
                         res.json(result.fulfillment);
                     } else {
