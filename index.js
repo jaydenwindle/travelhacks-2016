@@ -101,13 +101,14 @@ app.post('/aihook', function (req, res) {
                             date: result.parameters.date,
                             city: guide.city
                         });
-                        res.json("Added Activity");
+                        result.fulfillment.speech = "Added Activity"
+                        res.json(result.fulfillment);
                         
                     } else {
-                        res.json({});
+                        res.json();
                     }
                 } else {
-                    result.fulfillment.speech = 'You aren\'t a travel guide, so you can\'t add events'
+                    result.fulfillment.speech = "You aren\'t a travel guide, so you can\'t add events"
                     res.json(result.fulfillment);
                 }
             })
