@@ -65,7 +65,7 @@ function callSendAPI(messageData) {
 }
 
 // Home Page
-app.get('/', function(request, response) {
+app.get('/', function(req, res) {
     res.sendFile('./views/pages/landing-page/landing.html');
 });
 
