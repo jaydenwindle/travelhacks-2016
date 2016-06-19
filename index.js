@@ -63,14 +63,14 @@ app.post('/aihook', function (req, res) {
             if (!result.actionIncomplete) {
                 console.log('Adding new guide: ' + profile.user);
                 var newGuide = new controller.Guide({
-                    city: result.parameters['geo-city'], 
+                    city: result.parameters.city, 
                     name: profile.user, 
                     guideId: profile.id}
                 );
                 newGuide.save(function (err, guide) {
                     console.log(guide);
                     if (!err) {
-                        result.fulfillment.speech = 'You are now a travel guide in' + result.parameters['geo-city'] + '!'
+                        result.fulfillment.speech = 'You are now a travel guide in' + result.parameters.city + '!'
                         res.json(result.fulfillment);
                     }
                 });
