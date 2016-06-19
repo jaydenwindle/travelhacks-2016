@@ -33,9 +33,9 @@ Guide = mongoose.model('Guide', guideSchema);
 activitySchema = new Schema({
     guideId: Number,
     name: String,
-    address: String,
+    loc: String,
     city: String,
-    date: String
+    dat: String
 });
 Activity = mongoose.model('Activity', guideSchema);
 

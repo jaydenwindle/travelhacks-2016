@@ -143,7 +143,7 @@ app.post('/aihook', function (req, res) {
                         activities.forEach(function (act, i, arr) {
                             console.log(act._id);
                             console.log(i);
-                            result.fulfillment.speech += act.name + '\n' + 'Location: ' + act.address + '\n' + 'Time: ' + act.date + '\n\n';
+                            result.fulfillment.speech += act.name + '\n' + 'Location: ' + act.loc + '\n' + 'Time: ' + act.dat + '\n\n';
                         });
                         res.json(result.fulfillment);
                     } else {
