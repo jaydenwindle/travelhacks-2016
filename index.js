@@ -64,9 +64,10 @@ app.post('/aihook', function (req, res) {
                 console.log('Adding new guide: ' + profile.user);
                 var newGuide = new controller.Guide({
                     city: result.parameters.city, 
-                    name: profile.user, 
-                    guideId: profile.id}
-                );
+                    name: profile.name,
+                    phone: result.parameters.phone-number,
+                    guideId: profile.id
+                });
                 newGuide.save(function (err, guide) {
                     console.log(guide);
                     if (!err) {
