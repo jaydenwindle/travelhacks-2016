@@ -83,6 +83,13 @@ app.get('/webhook', function(req, res) {
 
 app.post('/aihook', function (req, res) {
     console.log(req.body);
+
+    var msg = ai.textRequest(message);
+
+    console.log(msg.result.action);
+    console.log(msg.result.parameters);
+    send()
+
 });
 
 // Main message processing
@@ -114,9 +121,9 @@ app.post('/webhook', function(req, res) {
 
                     var ai_req = ai.textRequest(message); 
 
-                    console.log(ai_req);
 
                     ai_req.on('response', function(response) {
+                        console.log(ai_req);
                         console.log(response);
                         send(id, response.result.fulfillment.speech)
                     });
