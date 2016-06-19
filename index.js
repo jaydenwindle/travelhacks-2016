@@ -66,7 +66,7 @@ app.post('/aihook', function (req, res) {
                 var newGuide = new controller.Guide({
                     city: result.parameters.city, 
                     name: profile.name,
-                    phone: result.parameters.phone-number,
+                    phone: result.parameters['phone-number'],
                     guideId: profile.id
                 });
                 newGuide.save(function (err, guide) {
@@ -76,6 +76,8 @@ app.post('/aihook', function (req, res) {
                         res.json(result.fulfillment);
                     }
                 });
+            } else {
+                res.json({});
             }
             break;
         
