@@ -46,7 +46,6 @@ app.get('/webhook', function(req, res) {
 });
 
 app.post('/aihook', function (req, res) {
-    console.log(req.body);
     var result = req.body.result;
     switch (result.action) {
         case 'findTourGuide':
