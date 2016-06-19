@@ -4,6 +4,7 @@ var config = require('./config.json');
 var bodyParser = require('body-parser');
 var request = require('request');
 var apiai = require('apiai');
+var mongoose = require('mongoose');
 var message = require('./messaging');
 var controller = require('./controller.js');
 
@@ -45,6 +46,7 @@ app.post('/aihook', function (req, res) {
     switch (result.action) {
         case 'findTourGuide':
             console.log('findTourGuide');
+            console.log(controller.User.find({userId: 1235}));
             break;
         
         default:
