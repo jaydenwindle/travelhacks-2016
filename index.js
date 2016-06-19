@@ -84,6 +84,18 @@ function callSendAPI(messageData) {
     });  
 }
 
+function firstEntityValue (entities, entity) {
+    val = entities && 
+        entities[entity] &&
+        Array.isArray(entities[entity]) &&
+        entities[entity].length > 0 &&
+        entities[entity][0].value;
+    if (!val) {
+        return null;
+    }
+    return typeof val === 'object' ? val.value : val;
+};
+
 // Wit.ai Actions
 var actions = {
     say(sessionId, context, message, cb){
@@ -98,9 +110,20 @@ var actions = {
     },
     merge(sessionId, context, entities, message, cb){
         getProfile(sessions[sessionId].id, function (profile) {
+            // fb profile info
             context.firstName = profile.first_name;
             context.lastName = profile.last_name;
             context.gender = profile.gender;
+
+            // wit entities
+            action = firstEntityValue(entities, 'action');
+            if (action) {
+                context.action = action;
+            }
+            loc = firstEntityValue(entities, 'location');
+            if (loc) {
+                context.loc = loc
+            }
             console.log(sessionId, context, entities, message);
             cb(context);
         })
