@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var apiai = require('apiai');
 var message = require('./messaging');
-var controller = require('./controller');
+var controller = require('./controller.js');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -78,9 +78,6 @@ app.post('/webhook', function(req, res) {
                     // Recieved a message 
                     console.log("Recieved Message: " + JSON.stringify(messagingEvent));
                     var id = messagingEvent.sender.id;
-                    getProfile(id, function (profile) {
-                        console.log(profile);
-                    });
                     message = messagingEvent.message.text;
                     atts = messagingEvent.attachments;
 
@@ -128,7 +125,7 @@ function getProfile(id, callback) {
     request.get({
         uri: 'https://graph.facebook.com/v2.6/' + id,
         qs: {
-            fields: 'first_name, last_name, username, locale, timezone, gender',
+            fields: 'first_name, last_name, locale, timezone, gender',
             access_token: process.env.page_token,
         }
     }, function (err, resp, profile) {
