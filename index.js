@@ -53,9 +53,11 @@ app.post('/aihook', function (req, res) {
             console.log('findTourGuide');
             console.log(profile);
             result.paramaters.name = profile.user;
-            controller.Guide.find({city: result.parameters['geo-city']}, function (err, users) {
+            controller.Guide.find({city: result.parameters.city}, function (err, users) {
                 console.log(users);
-                res.json({});
+                result.fulfillment.speech = 'Your tour guide is ' + users[0].name '.\n'+
+                'Get in touch with them by texting ' + users[0].phone;
+                res.json(result.fulfillment);
             });
             break;
         case 'addTourGuide':
