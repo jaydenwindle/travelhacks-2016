@@ -77,6 +77,9 @@ app.post('/webhook', function(req, res) {
                     // Recieved a message 
                     console.log("Recieved Message: " + JSON.stringify(messagingEvent));
                     var id = messagingEvent.sender.id;
+                    getProfile(id, function (profile) {
+                        console.log(profile);
+                    });
                     message = messagingEvent.message.text;
                     atts = messagingEvent.attachments;
 
@@ -128,7 +131,6 @@ function getProfile(id, callback) {
             access_token: process.env.page_token,
         }
     }, function (err, resp, profile) {
-        console.log(profile);
         callback(JSON.parse(profile));
     });
 }
