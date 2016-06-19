@@ -87,6 +87,30 @@ app.post('/aihook', function (req, res) {
                 res.json({});
             }
             break;
+
+        case 'addActivity':
+            console.log('addActivity');
+            var guide = controller.Guide.find({guideId: profile.id})
+            if ((guide.length) > 0) {
+                if (!result.actionIncomplete) { 
+                    var newActivity = new controller.Activity({
+                        guideId: profile.id,
+                        name: result.parameters.name,
+                        loc: result.parameters.loc,
+                        date: result.parameters.date,
+                        city: guide.city
+                    });
+                    res.json("Added Activity");
+                    
+                } else {
+                    res.json({});
+                }
+            } else {
+                result.fulfillment.speech = 'You aren\'t a travel guide, so you can\'t add events'
+                res.json(result.fulfillment);
+            }
+            break;
+
         
         default:
             console.log('no handler foudn');
