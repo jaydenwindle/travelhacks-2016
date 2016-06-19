@@ -1,7 +1,7 @@
 var request = require('request');
 var config = require('./config.json');
 
-send = function (recipientId, messageText) {
+function send(recipientId, messageText) {
 	var messageData = {
 		recipient: {
 			id: recipientId
