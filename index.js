@@ -50,11 +50,11 @@ app.post('/aihook', function (req, res) {
                 console.log(users);
                 if (users.length < 1) {
                     result.fulfillment.speech = "No guides found";
-                    res.json();
                 } else {
                     result.fulfillment.speech = "Found guide " + users[0].userName;
-                    res.json(result.fulfillment);
                 }
+                
+                res.json(result.fulfillment);
             });
             break;
         case 'addTourGuide':
