@@ -70,7 +70,7 @@ app.post('/aihook', function (req, res) {
                 newGuide.save(function (err, guide) {
                     console.log(guide);
                     if (!err) {
-                        result.fulfillment.speech = 'You are now a travel guide in' + result.parameters['geo-city']'!'
+                        result.fulfillment.speech = 'You are now a travel guide in' + result.parameters['geo-city'] + '!'
                         res.json(result.fulfillment);
                     }
                 });
