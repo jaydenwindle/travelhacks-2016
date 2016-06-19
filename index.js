@@ -56,7 +56,7 @@ var actions = {
         id = sessions[sessionId].id;
         if (id) {
             console.log(id);
-            message.send(id, message);
+            send(id, message);
         } else {
             console.log('Wit say error');
         }
