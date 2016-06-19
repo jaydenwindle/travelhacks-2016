@@ -105,7 +105,6 @@ app.post('/webhook', function(req, res) {
                     // Recieved a message 
                     console.log("Recieved Message: " + JSON.stringify(messagingEvent));
                     var id = messagingEvent.sender.id;
-                    sessionId = getSessionId(id);
                     message = messagingEvent.message.text;
                     atts = messagingEvent.attachments;
 
