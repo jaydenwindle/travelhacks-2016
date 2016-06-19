@@ -104,6 +104,9 @@ app.post('/webhook', function(req, res) {
 
                     ai_req.on('response', function(response) {
                         console.log(response);
+                        response.result.contexts.forEach(function (r) {
+                            console.log(r);
+                        });
                         send(id, response.result.fulfillment.speech)
                     });
 
