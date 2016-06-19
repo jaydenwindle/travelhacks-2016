@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var request = require('request');
 var apiai = require('apiai');
 var message = require('./messaging');
+var controller = require('./controller');
 
 app.set('port', (process.env.PORT || 5000));
 
