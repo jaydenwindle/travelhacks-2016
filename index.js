@@ -20,7 +20,8 @@ var ai = apiai('fb2c9b42a72f491783ff189925dd909f');
 
 var profile = {
     id: 0,
-    user: ''
+    user: '',
+    phone: 0
 }
 
 
