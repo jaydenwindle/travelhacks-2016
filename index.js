@@ -66,7 +66,7 @@ function callSendAPI(messageData) {
 
 // Home Page
 app.get('/', function(req, res) {
-    res.sendFile('./views/pages/landing-page/landing.html');
+    res.sendFile(__dirname + '/views/pages/landing-page/landing.html');
 });
 
 // Let's facebook verify our app
