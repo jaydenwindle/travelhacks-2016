@@ -51,7 +51,7 @@ app.post('/aihook', function (req, res) {
     switch (result.action) {
         case 'findTourGuide':
             console.log('findTourGuide');
-            console.log(profile);
+            console.log(result);
             result.paramaters.name = profile.user;
             controller.Guide.find({city: result.parameters.city}, function (err, users) {
                 console.log(users);
