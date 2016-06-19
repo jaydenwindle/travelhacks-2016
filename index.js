@@ -2,25 +2,155 @@ var express = require('express');
 var app = express();
 var config = require('./config.json');
 var bodyParser = require('body-parser');
-var message = require('./messaging.js');
 var request = require('request');
+var Wit = require('node-wit').Wit;
 
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
-
-// views is directory for all template files
+ 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
+// Stores all active sessions
+// sessionID: { id:  FB_USER_ID, context: WIT_CONTEXT }
+var sessions = {}
+
+function getSessionId(userId) {
+    var sessionId;
+
+    Object.keys(sessions).forEach(function (s) {
+        if (sessions[s] == userId) {
+            sessionId = s;
+        }
+    });
+    if (!sessionId) {
+        sessionId = new Date().toISOString();
+        sessions[sessionId] = {
+            id: userId,
+            context: {}
+        }
+    }
+    return sessionId;
+}
+
+function getProfile(id, callback) {
+    var ret;
+    request.get({
+        uri: 'https://graph.facebook.com/v2.6/' + id,
+        qs: {
+            fields: 'first_name, last_name, locale, timezone, gender',
+            access_token: process.env.page_token,
+        }
+    }, function (err, resp, profile) {
+        callback(JSON.parse(profile));
+    });
+}
+
+function send(recipientId, messageText) {
+	var messageData = {
+		recipient: {
+			id: recipientId
+		},
+		message: {
+			text: messageText
+		}
+	};
+
+    console.log('Calling send api');
+	callSendAPI(messageData);
+}
+
+function callSendAPI(messageData) {
+    request({
+        uri: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: { access_token: process.env.page_token },
+        method: 'POST',
+        json: messageData
+
+    }, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            var recipientId = body.recipient_id;
+            var messageId = body.message_id;
+
+            console.log("Successfully sent generic message with id %s to recipient %s", 
+            messageId, recipientId);
+        } else {
+            console.error("Unable to send message.");
+            console.error(response);
+            console.error(error);
+        }
+    });  
+}
+
+function firstEntityValue (entities, entity) {
+    val = entities && 
+        entities[entity] &&
+        Array.isArray(entities[entity]) &&
+        entities[entity].length > 0 &&
+        entities[entity][0].value;
+    if (!val) {
+        return null;
+    }
+    return typeof val === 'object' ? val.value : val;
+};
+
+// Wit.ai Actions
+var actions = {
+    say(sessionId, context, message, cb){
+        id = sessions[sessionId].id;
+        if (id) {
+            console.log(id);
+            send(id, message);
+        } else {
+            console.log('Wit say error');
+        }
+        cb();
+    },
+    merge(sessionId, context, entities, message, cb){
+        getProfile(sessions[sessionId].id, function (profile) {
+            // fb profile info
+            context.firstName = profile.first_name;
+            context.lastName = profile.last_name;
+            context.gender = profile.gender;
+
+            // wit entities
+            action = firstEntityValue(entities, 'action');
+            if (action) {
+                context.action = action;
+            }
+            loc = firstEntityValue(entities, 'location');
+            if (loc) {
+                context.loc = loc
+            }
+            yes_no = firstEntityValue(entities, 'yes_no');
+            if (yes_no) {
+                context.yes_no = yes_no
+            }
+
+            console.log(sessionId, context, entities, message);
+            cb(context);
+        })
+    },
+    error(sessionId, context, error){
+        console.log(error);
+    }
+}
+
+// Sets up wit
+var witClient = new Wit(process.env.wit_token, actions);
+
+
+// Home Page
 app.get('/', function(request, response) {
     response.send("Welcome to Chiri");
 });
 
+// Let's facebook verify our app
 app.get('/webhook', function(req, res) {
     if (req.query['hub.mode'] === 'subscribe' &&
-      req.query['hub.verify_token'] === config.webhook_token) {
+      req.query['hub.verify_token'] === process.env.webhook_token) {
         console.log("Validating webhook");
         res.status(200).send(req.query['hub.challenge']);
     } else {
@@ -29,6 +159,7 @@ app.get('/webhook', function(req, res) {
     }  
 });
 
+// Main message processing
 app.post('/webhook', function(req, res) {
     var data = req.body;
 
@@ -42,22 +173,41 @@ app.post('/webhook', function(req, res) {
 
             // Iterate over each messaging event
             pageEntry.messaging.forEach(function(messagingEvent) {
-            if (messagingEvent.optin) {
-                console.log("Recieved Auth: " + JSON.stringify(messagingEvent));
-                //receivedAuthentication(messagingEvent);
-            } else if (messagingEvent.message) {
-                console.log("Recieved Message: " + JSON.stringify(messagingEvent));
-                message.send(messagingEvent.sender.id, "Hello there!");
-                //receivedMessage(messagingEvent);
-            } else if (messagingEvent.delivery) {
-                console.log("Recieved Delivery: " + JSON.stringify(messagingEvent));
-                //receivedDeliveryConfirmation(messagingEvent);
-            } else if (messagingEvent.postback) {
-                console.log("Recieved Postback: " + JSON.stringify(messagingEvent));
-                //receivedPostback(messagingEvent);
-            } else {
-                console.log("Webhook received unknown messagingEvent: ", messagingEvent);
-            }
+                if (messagingEvent.optin) {
+
+                    // User Authenticated to our bot
+                    console.log("Recieved Auth: " + JSON.stringify(messagingEvent));
+
+                } else if (messagingEvent.message) {
+
+                    // Recieved a message 
+                    console.log("Recieved Message: " + JSON.stringify(messagingEvent));
+                    var id = messagingEvent.sender.id;
+                    sessionId = getSessionId(id);
+                    message = messagingEvent.message.text;
+                    atts = messagingEvent.attachments;
+                    
+                    witClient.runActions(sessionId, message, sessions[sessionId].context, function (error, context) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log("Finished actions");
+                        }
+                    });
+
+                } else if (messagingEvent.delivery) {
+                    // Message sent successfully
+                    console.log("Recieved Delivery: " + JSON.stringify(messagingEvent));
+
+                } else if (messagingEvent.postback) {
+
+                    // User clicked a button on a formatted message
+                    console.log("Recieved Postback: " + JSON.stringify(messagingEvent));
+                
+                } else {
+                    // some error
+                    console.log("Webhook received unknown messagingEvent: ", messagingEvent);
+                }
             });
         });
 
