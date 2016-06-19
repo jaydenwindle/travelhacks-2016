@@ -57,6 +57,7 @@ app.post('/aihook', function (req, res) {
                 console.log(users);
                 result.fulfillment.speech = 'Your tour guide is ' + users[0].name + '.\n'+
                 'Get in touch with them by texting ' + users[0].phone;
+                send(users[0].guideId, profile.name + ' asked for a travel guide in ' + users[0].city + ', so we gave them your number. Expect to hear from them!');
                 res.json(result.fulfillment);
             });
             break;
