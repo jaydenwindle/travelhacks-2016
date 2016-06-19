@@ -201,7 +201,7 @@ app.post('/webhook', function(req, res) {
                         console.log(response);
                         respmsg = response.result.fulfillment.speech;
                         if (respmsg.indexOf('$name') > -1) {
-                            respmsg = respmsg.replace('$name', profile.user);
+                            respmsg = respmsg.replace('$name', profile.name);
                         }
                         send(profile.id, respmsg)
                     });
