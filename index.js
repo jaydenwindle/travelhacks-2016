@@ -3,7 +3,7 @@ var app = express();
 var config = require('./config.json');
 var bodyParser = require('body-parser');
 var request = require('request');
-var Wit = require('node-wit').Wit;
+var apiai = require('apiai');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -13,27 +13,7 @@ app.use(bodyParser.json());
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
-// Stores all active sessions
-// sessionID: { id:  FB_USER_ID, context: WIT_CONTEXT }
-var sessions = {}
-
-function getSessionId(userId) {
-    var sessionId;
-
-    Object.keys(sessions).forEach(function (s) {
-        if (sessions[s] == userId) {
-            sessionId = s;
-        }
-    });
-    if (!sessionId) {
-        sessionId = new Date().toISOString();
-        sessions[sessionId] = {
-            id: userId,
-            context: {}
-        }
-    }
-    return sessionId;
-}
+var ai = apiai('fb2c9b42a72f491783ff189925dd909f');
 
 function getProfile(id, callback) {
     var ret;
@@ -84,56 +64,6 @@ function callSendAPI(messageData) {
     });  
 }
 
-function firstEntityValue (entities, entity) {
-    val = entities && 
-        entities[entity] &&
-        Array.isArray(entities[entity]) &&
-        entities[entity].length > 0 &&
-        entities[entity][0].value;
-    if (!val) {
-        return null;
-    }
-    return typeof val === 'object' ? val.value : val;
-};
-
-// Wit.ai Actions
-var actions = {
-    say(sessionId, context, message, cb){
-        id = sessions[sessionId].id;
-        if (id) {
-            console.log(id);
-            send(id, message);
-        } else {
-            console.log('wit say error');
-        }
-        cb();
-    },
-    getActivities(sessionId, context, message, cb){
-        msg = "I'm finding activities in " + context.loc;
-        say(sessionId, context, msg, cb);
-    },
-    merge(sessionId, context, entities, message, cb){
-        getProfile(sessions[sessionId].id, function (profile) {
-            // fb profile info
-            context.firstName = profile.first_name;
-            context.lastName = profile.last_name;
-            context.gender = profile.gender;
-
-            // wit entities
-
-            console.log(sessionId, context, entities, message);
-            cb(context);
-        })
-    },
-    error(sessionId, context, error){
-        console.log(error);
-    }
-}
-
-// Sets up wit
-var witClient = new Wit(process.env.wit_token, actions);
-
-
 // Home Page
 app.get('/', function(request, response) {
     response.send("Welcome to Chiri");
@@ -178,15 +108,19 @@ app.post('/webhook', function(req, res) {
                     sessionId = getSessionId(id);
                     message = messagingEvent.message.text;
                     atts = messagingEvent.attachments;
-                    
-                    witClient.runActions(sessionId, message, sessions[sessionId].context, function (error, context) {
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            console.log("Finished actions");
-                        }
+
+                    var ai_req = app.textRequest(message); 
+
+                    ai_req.on('response', function(response) {
+                        console.log(response);
                     });
 
+                    ai_req.on('error', function(error) {
+                        console.log(error);
+                    });
+
+                    ai_req.end();
+                                        
                 } else if (messagingEvent.delivery) {
                     // Message sent successfully
                     console.log("Recieved Delivery: " + JSON.stringify(messagingEvent));
