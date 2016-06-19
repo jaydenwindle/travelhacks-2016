@@ -112,6 +112,7 @@ app.post('/webhook', function(req, res) {
 
                     ai_req.on('response', function(response) {
                         console.log(response);
+                        send(response.fulfillment.speech)
                     });
 
                     ai_req.on('error', function(error) {
