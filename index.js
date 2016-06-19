@@ -91,6 +91,7 @@ app.post('/aihook', function (req, res) {
         case 'addActivity':
             console.log('addActivity');
             var guide = controller.Guide.find({guideId: profile.id})
+            console.log(guide);
             if ((guide.length) > 0) {
                 if (!result.actionIncomplete) { 
                     var newActivity = new controller.Activity({
