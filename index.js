@@ -104,9 +104,13 @@ var actions = {
             console.log(id);
             send(id, message);
         } else {
-            console.log('Wit say error');
+            console.log('wit say error');
         }
         cb();
+    },
+    getActivities(sessionId, context, message, cb){
+        msg = "I'm finding activities in " + context.loc;
+        say(sessionId, context, msg, cb);
     },
     merge(sessionId, context, entities, message, cb){
         getProfile(sessions[sessionId].id, function (profile) {
@@ -116,18 +120,6 @@ var actions = {
             context.gender = profile.gender;
 
             // wit entities
-            action = firstEntityValue(entities, 'action');
-            if (action) {
-                context.action = action;
-            }
-            loc = firstEntityValue(entities, 'location');
-            if (loc) {
-                context.loc = loc
-            }
-            yes_no = firstEntityValue(entities, 'yes_no');
-            if (yes_no) {
-                context.yes_no = yes_no
-            }
 
             console.log(sessionId, context, entities, message);
             cb(context);
