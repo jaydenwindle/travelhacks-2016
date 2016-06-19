@@ -40,6 +40,7 @@ app.get('/webhook', function(req, res) {
 
 app.post('/aihook', function (req, res) {
     console.log(req.body);
+    console.log('I want this to work');
 
 });
 
