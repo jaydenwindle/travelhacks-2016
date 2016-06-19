@@ -18,6 +18,11 @@ app.set('view engine', 'jade');
 
 var ai = apiai('fb2c9b42a72f491783ff189925dd909f');
 
+var profile = {
+    id: 0,
+    user: ''
+}
+
 
 // Home Page
 app.get('/', function(req, res) {
@@ -46,6 +51,7 @@ app.post('/aihook', function (req, res) {
     switch (result.action) {
         case 'findTourGuide':
             console.log('findTourGuide');
+            console.log(profile);
             controller.Guide.find({city: result.parameters['geo-city']}, function (err, users) {
                 console.log(users);
                 if (users.length < 1) {
@@ -95,18 +101,18 @@ app.post('/webhook', function(req, res) {
 
                     // Recieved a message 
                     console.log("Recieved Message: " + JSON.stringify(messagingEvent));
-                    var id = messagingEvent.sender.id;
+                    profile.id = messagingEvent.sender.id;
+                    getProfile(profile.id, function (p) {
+                        profile.user = p.first_name;
+                    });
                     message = messagingEvent.message.text;
                     atts = messagingEvent.attachments;
 
-                    var ai_req = ai.textRequest(message, {entities:[{name: 'fbid', value: id}]}); 
+                    var ai_req = ai.textRequest(message); 
                     console.log(ai_req);
 
                     ai_req.on('response', function(response) {
                         console.log(response);
-                        response.result.contexts.forEach(function (r) {
-                            console.log(r);
-                        });
                         send(id, response.result.fulfillment.speech)
                     });
 
