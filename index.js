@@ -146,7 +146,7 @@ app.post('/aihook', function (req, res) {
                         });
                         res.json(result.fulfillment);
                     } else {
-                        result.fulfillment.speech('No ativities found in ' + results.parameters.city);
+                        result.fulfillment.speech('No ativities found in ' + result.parameters.city);
                         res.json(result.fulfillment)
                     }
                 });
