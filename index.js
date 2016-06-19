@@ -124,6 +124,11 @@ var actions = {
             if (loc) {
                 context.loc = loc
             }
+            yes_no = firstEntityValue(entities, 'yes_no');
+            if (yes_no) {
+                context.yes_no = yes_no
+            }
+
             console.log(sessionId, context, entities, message);
             cb(context);
         })
