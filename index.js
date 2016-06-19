@@ -40,8 +40,16 @@ app.get('/webhook', function(req, res) {
 
 app.post('/aihook', function (req, res) {
     console.log(req.body);
-
-    console.log(req.body.result.action + " being performed")
+    var result = req.body.result;
+    switch (result.action) {
+        case 'findTourGuide':
+            console.log('findTourGuide');
+            break;
+        
+        default:
+            console.log('no handler foudn');
+            
+    }
 
 });
 
