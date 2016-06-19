@@ -33,7 +33,7 @@ Guide = mongoose.model('Guide', guideSchema);
 activitySchema = new Schema({
     guideId: Number,
     name: String,
-    loc: String,
+    address: String,
     city: String,
     date: String
 });

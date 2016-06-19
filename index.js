@@ -108,8 +108,8 @@ app.post('/aihook', function (req, res) {
                         var newActivity = new controller.Activity({
                             guideId: profile.id,
                             name: result.parameters.name,
-                            loc: result.parameters.address,
-                            date: result.parameters['date-time'],
+                            address: result.parameters.address,
+                            date: result.parameters['date-time'].refString,
                             city: guide[0].city
                         });
                         newActivity.save(function (err, activity) {
@@ -142,7 +142,7 @@ app.post('/aihook', function (req, res) {
                         result.fulfillment.speech = 'Guides recommend the following activities in ' + result.parameters.city + '\n\n';
                         activities.forEach(function (act) {
                             console.log(act);
-                            result.fulfillment.speech += act.name + '\n' + 'Location: ' + act.address + '\n' + 'Time: ' + act['date-time'] + '\n\n';
+                            result.fulfillment.speech += act.name + '\n' + 'Location: ' + act.address + '\n' + 'Time: ' + act.date + '\n\n';
                         });
                         res.json(result.fulfillment);
                     } else {
