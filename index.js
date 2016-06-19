@@ -41,15 +41,6 @@ app.get('/webhook', function(req, res) {
 app.post('/aihook', function (req, res) {
     console.log(req.body);
 
-    var msg = ai.textRequest(message);
-
-    msg.on
-    console.log(msg);
-    console.log(msg);
-    
-    
-    send(msg.result.action)
-
 });
 
 // Main message processing
