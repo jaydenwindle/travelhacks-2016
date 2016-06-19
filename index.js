@@ -86,8 +86,9 @@ app.post('/aihook', function (req, res) {
 
     var msg = ai.textRequest(message);
 
-    console.log(msg.result.action);
-    console.log(msg.result.parameters);
+    msg.on
+    console.log(msg);
+    console.log(msg);
     
     
     send(msg.result.action)
