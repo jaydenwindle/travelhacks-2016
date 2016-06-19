@@ -52,14 +52,9 @@ app.post('/aihook', function (req, res) {
         case 'findTourGuide':
             console.log('findTourGuide');
             console.log(profile);
+            result.paramaters.name = profile.user;
             controller.Guide.find({city: result.parameters['geo-city']}, function (err, users) {
                 console.log(users);
-                if (users.length < 1) {
-                    result.fulfillment.speech = "No guides found";
-                } else {
-                    result.fulfillment.speech = "Found guide " + users[0].userName;
-                }
-                
                 res.json(result.fulfillment);
             });
             break;
