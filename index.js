@@ -132,7 +132,7 @@ app.post('/aihook', function (req, res) {
             break;
 
         case 'findActivities':
-            console.log('findTourGuide');
+            console.log('findActivities');
             console.log(result);
             if (!result.actionIncomplete) {
                 controller.Activity.find({city: result.parameters.city}, function (err, activities) {
