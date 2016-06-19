@@ -108,10 +108,11 @@ app.post('/webhook', function(req, res) {
 
                     ai_req.on('response', function(response) {
                         console.log(response);
-                        if (response.result.fulfillment.speech.indexOf('$name') > -1) {
-                            response.result.fulfillment.speech.replace('$name', profile.user);
+                        respmsg = response.result.fulfillment.speech;
+                        if (respmsg.indexOf('$name') > -1) {
+                            respmsg = respmsg.replace('$name', profile.user);
                         }
-                        send(profile.id, response.result.fulfillment.speech)
+                        send(profile.id, respmsg)
                     });
 
                     ai_req.on('error', function(error) {
