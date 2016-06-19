@@ -53,13 +53,17 @@ app.post('/aihook', function (req, res) {
         case 'findTourGuide':
             console.log('findTourGuide');
             console.log(result);
-            controller.Guide.find({city: result.parameters.city}, function (err, users) {
-                console.log(users);
-                result.fulfillment.speech = 'Your tour guide is ' + users[0].name + '.\n'+
-                'Get in touch with them by texting ' + users[0].phone;
-                send(users[0].guideId, profile.name + ' asked for a travel guide in ' + users[0].city + ', so we gave them your number. Expect to hear from them!');
-                res.json(result.fulfillment);
-            });
+            if (!result.actionIncomplete) {
+                controller.Guide.find({city: result.parameters.city}, function (err, users) {
+                    console.log(users);
+                    result.fulfillment.speech = 'Your tour guide is ' + users[0].name + '.\n'+
+                    'Get in touch with them by texting ' + users[0].phone;
+                    send(users[0].guideId, profile.name + ' asked for a travel guide in ' + users[0].city + ', so we gave them your number. Their number is '+ result.parameters['phone-number'] + '. Expect to hear from them!');
+                    res.json(result.fulfillment);
+                });
+            } else {
+                res.json({});
+            }
             break;
         case 'addTourGuide':
             console.log('addTourGuide');
