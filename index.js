@@ -116,7 +116,7 @@ app.post('/webhook', function(req, res) {
                     profile.id = messagingEvent.sender.id;
                     getProfile(profile.id, function (p) {
                         console.log(p);
-                        profile.user = p.first_name;
+                        profile.name = p.first_name;
                     });
                     message = messagingEvent.message.text;
                     atts = messagingEvent.attachments;
