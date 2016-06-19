@@ -61,10 +61,12 @@ app.post('/aihook', function (req, res) {
         case 'addTourGuide':
             console.log('addTourGuide');
             console.log(result)
-            //var newGuide = new controller.Guide({city: result.parameters['geo-city'], userName: "Test"});
-            //newGuide.save(function (err, guide) {
-            //    console.log(guide);
-            //});
+            if (!result.actionIncomplete) {
+                var newGuide = new controller.Guide({city: result.parameters['geo-city'], userName: "Test"});
+                newGuide.save(function (err, guide) {
+                    console.log(guide);
+                });
+            }
             break;
         
         default:
@@ -96,7 +98,7 @@ app.post('/webhook', function(req, res) {
                 } else if (messagingEvent.message) {
 
                     // Recieved a message 
-                    console.log("Recieved Message: " + JSON.stringify(messagingEvent));
+                    //console.log("Recieved Message: " + JSON.stringify(messagingEvent));
                     profile.id = messagingEvent.sender.id;
                     getProfile(profile.id, function (p) {
                         profile.user = p.first_name;
