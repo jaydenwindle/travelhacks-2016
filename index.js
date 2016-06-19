@@ -108,7 +108,7 @@ app.post('/webhook', function(req, res) {
                     message = messagingEvent.message.text;
                     atts = messagingEvent.attachments;
 
-                    var ai_req = app.textRequest(message); 
+                    var ai_req = ai.textRequest(message); 
 
                     ai_req.on('response', function(response) {
                         console.log(response);
