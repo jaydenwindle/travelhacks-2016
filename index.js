@@ -46,7 +46,9 @@ app.post('/aihook', function (req, res) {
     switch (result.action) {
         case 'findTourGuide':
             console.log('findTourGuide');
-            console.log(controller.User.find({userId: 1235}));
+            controller.User.find({userId: 1235}, function (err, users) {
+                console.log(users);
+            });
             break;
         
         default:
