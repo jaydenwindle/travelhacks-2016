@@ -88,7 +88,9 @@ app.post('/aihook', function (req, res) {
 
     console.log(msg.result.action);
     console.log(msg.result.parameters);
-    send()
+    
+    
+    send(msg.result.action)
 
 });
 
