@@ -138,12 +138,17 @@ app.post('/aihook', function (req, res) {
             if (!result.actionIncomplete) { 
                 controller.Activity.find({city: result.parameters.city}, function (err, activities) {
                     console.log(activities);
-                    result.fulfillment.speech = 'Guides recommend the following activities in ' + activities[0].city + '\n';
-                    activities.forEach(function (act) {
-                        console.log(act);
-                        result.fulfillment.speech += act.name + '\n' + 'Location: ' + act.address + '\n' + 'Time: ' + act['date-time'];
-                    });
-                    res.json(result.fulfillment);
+                    if (activities.length > 0) {
+                        result.fulfillment.speech = 'Guides recommend the following activities in ' + results.parameters.city + '\n';
+                        activities.forEach(function (act) {
+                            console.log(act);
+                            result.fulfillment.speech += act.name + '\n' + 'Location: ' + act.address + '\n' + 'Time: ' + act['date-time'];
+                        });
+                        res.json(result.fulfillment);
+                    } else {
+                        result.fulfillment.speech('No ativities found in ' + results.parameters.city);
+                        res.json{}
+                    }
                 });
             } else {
                 res.json({});
