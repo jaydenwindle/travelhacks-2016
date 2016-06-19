@@ -4,7 +4,9 @@ var config = require('./config.json');
 var bodyParser = require('body-parser');
 var request = require('request');
 var apiai = require('apiai');
+var mongoose = require('mongoose');
 var message = require('./messaging');
+var controller = require('./controller.js');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -15,6 +17,11 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 var ai = apiai('fb2c9b42a72f491783ff189925dd909f');
+
+var profile = {
+    id: 0,
+    user: ''
+}
 
 
 // Home Page
@@ -39,7 +46,41 @@ app.get('/webhook', function(req, res) {
 });
 
 app.post('/aihook', function (req, res) {
-    console.log(req.body);
+    var result = req.body.result;
+    switch (result.action) {
+        case 'findTourGuide':
+            console.log('findTourGuide');
+            console.log(profile);
+            result.paramaters.name = profile.user;
+            controller.Guide.find({city: result.parameters['geo-city']}, function (err, users) {
+                console.log(users);
+                res.json({});
+            });
+            break;
+        case 'addTourGuide':
+            console.log('addTourGuide');
+            console.log(result)
+            if (!result.actionIncomplete) {
+                console.log('Adding new guide: ' + profile.user);
+                var newGuide = new controller.Guide({
+                    city: result.parameters.city, 
+                    name: profile.user, 
+                    guideId: profile.id}
+                );
+                newGuide.save(function (err, guide) {
+                    console.log(guide);
+                    if (!err) {
+                        result.fulfillment.speech = 'You are now a travel guide in ' + result.parameters.city + '!'
+                        res.json(result.fulfillment);
+                    }
+                });
+            }
+            break;
+        
+        default:
+            console.log('no handler foudn');
+            
+    }
 
 });
 
@@ -65,17 +106,24 @@ app.post('/webhook', function(req, res) {
                 } else if (messagingEvent.message) {
 
                     // Recieved a message 
-                    console.log("Recieved Message: " + JSON.stringify(messagingEvent));
-                    var id = messagingEvent.sender.id;
+                    //console.log("Recieved Message: " + JSON.stringify(messagingEvent));
+                    profile.id = messagingEvent.sender.id;
+                    getProfile(profile.id, function (p) {
+                        profile.user = p.first_name;
+                    });
                     message = messagingEvent.message.text;
                     atts = messagingEvent.attachments;
 
                     var ai_req = ai.textRequest(message); 
-
+                    console.log(ai_req);
 
                     ai_req.on('response', function(response) {
                         console.log(response);
-                        send(id, response.result.fulfillment.speech)
+                        respmsg = response.result.fulfillment.speech;
+                        if (respmsg.indexOf('$name') > -1) {
+                            respmsg = respmsg.replace('$name', profile.user);
+                        }
+                        send(profile.id, respmsg)
                     });
 
                     ai_req.on('error', function(error) {
