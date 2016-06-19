@@ -111,6 +111,7 @@ app.post('/webhook', function(req, res) {
                     //console.log("Recieved Message: " + JSON.stringify(messagingEvent));
                     profile.id = messagingEvent.sender.id;
                     getProfile(profile.id, function (p) {
+                        console.log(p);
                         profile.user = p.first_name;
                     });
                     message = messagingEvent.message.text;
