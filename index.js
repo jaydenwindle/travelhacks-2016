@@ -90,26 +90,27 @@ app.post('/aihook', function (req, res) {
 
         case 'addActivity':
             console.log('addActivity');
-            var guide = controller.Guide.find({guideId: profile.id})
-            console.log(guide);
-            if ((guide.length) > 0) {
-                if (!result.actionIncomplete) { 
-                    var newActivity = new controller.Activity({
-                        guideId: profile.id,
-                        name: result.parameters.name,
-                        loc: result.parameters.loc,
-                        date: result.parameters.date,
-                        city: guide.city
-                    });
-                    res.json("Added Activity");
-                    
+            var guide = controller.Guide.find({guideId: profile.id}, function (err, guide) {
+                console.log(guide);
+                if ((guide.length) > 0) {
+                    if (!result.actionIncomplete) { 
+                        var newActivity = new controller.Activity({
+                            guideId: profile.id,
+                            name: result.parameters.name,
+                            loc: result.parameters.loc,
+                            date: result.parameters.date,
+                            city: guide.city
+                        });
+                        res.json("Added Activity");
+                        
+                    } else {
+                        res.json({});
+                    }
                 } else {
-                    res.json({});
+                    result.fulfillment.speech = 'You aren\'t a travel guide, so you can\'t add events'
+                    res.json(result.fulfillment);
                 }
-            } else {
-                result.fulfillment.speech = 'You aren\'t a travel guide, so you can\'t add events'
-                res.json(result.fulfillment);
-            }
+            })
             break;
 
         
