@@ -52,7 +52,7 @@ app.post('/aihook', function (req, res) {
             break;
         case 'addTourGuide':
             console.log('addTourGuide');
-            var newGuide = new controller.Guide({city: result.parameters.'geo-city', userName: "Test"});
+            var newGuide = new controller.Guide({city: result.parameters['geo-city'], userName: "Test"});
             newGuide.save(function (err, guide) {
                 console.log(guide);
             });
