@@ -20,7 +20,8 @@ var ai = apiai('fb2c9b42a72f491783ff189925dd909f');
 
 var profile = {
     id: 0,
-    user: ''
+    user: '',
+    phone: 0
 }
 
 
@@ -65,7 +66,7 @@ app.post('/aihook', function (req, res) {
                 var newGuide = new controller.Guide({
                     city: result.parameters.city, 
                     name: profile.name,
-                    phone: result.parameters.phone-number,
+                    phone: result.parameters['phone-number'],
                     guideId: profile.id
                 });
                 newGuide.save(function (err, guide) {
@@ -75,6 +76,8 @@ app.post('/aihook', function (req, res) {
                         res.json(result.fulfillment);
                     }
                 });
+            } else {
+                res.json({});
             }
             break;
         
@@ -110,6 +113,7 @@ app.post('/webhook', function(req, res) {
                     //console.log("Recieved Message: " + JSON.stringify(messagingEvent));
                     profile.id = messagingEvent.sender.id;
                     getProfile(profile.id, function (p) {
+                        console.log(p);
                         profile.user = p.first_name;
                     });
                     message = messagingEvent.message.text;
@@ -128,7 +132,7 @@ app.post('/webhook', function(req, res) {
                     });
 
                     ai_req.on('error', function(error) {
-                        console.log(error);
+                        console.log(error + "Ai error");
                     });
 
                     ai_req.end();
@@ -201,7 +205,7 @@ function callSendAPI(messageData) {
             messageId, recipientId);
         } else {
             console.error("Unable to send message.");
-            console.error(response);
+            //console.error(response);
             console.error(error);
         }
     });  
