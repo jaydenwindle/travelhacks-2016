@@ -23,10 +23,9 @@ userSchema = new Schema({
 User = mongoose.model('User', userSchema);
 
 guideSchema = new Schema({
-    guidId: Number,
+    guideId: Number,
     userName: String,
     city: String,
-    daysAvailable: Array
 });
 Guide = mongoose.model('Guide', guideSchema);
 
