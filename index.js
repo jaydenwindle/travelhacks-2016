@@ -4,6 +4,7 @@ var config = require('./config.json');
 var bodyParser = require('body-parser');
 var request = require('request');
 var apiai = require('apiai');
+var message = require('./messaging');
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -15,58 +16,14 @@ app.set('view engine', 'jade');
 
 var ai = apiai('fb2c9b42a72f491783ff189925dd909f');
 
-function getProfile(id, callback) {
-    var ret;
-    request.get({
-        uri: 'https://graph.facebook.com/v2.6/' + id,
-        qs: {
-            fields: 'first_name, last_name, locale, timezone, gender',
-            access_token: process.env.page_token,
-        }
-    }, function (err, resp, profile) {
-        callback(JSON.parse(profile));
-    });
-}
-
-function send(recipientId, messageText) {
-	var messageData = {
-		recipient: {
-			id: recipientId
-		},
-		message: {
-			text: messageText
-		}
-	};
-
-    console.log('Calling send api');
-	callSendAPI(messageData);
-}
-
-function callSendAPI(messageData) {
-    request({
-        uri: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: { access_token: process.env.page_token },
-        method: 'POST',
-        json: messageData
-
-    }, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            var recipientId = body.recipient_id;
-            var messageId = body.message_id;
-
-            console.log("Successfully sent generic message with id %s to recipient %s", 
-            messageId, recipientId);
-        } else {
-            console.error("Unable to send message.");
-            console.error(response);
-            console.error(error);
-        }
-    });  
-}
 
 // Home Page
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/views/pages/landing-page/landing.html');
+});
+
+app.get('/guide-signup', function (req, res) {
+    res.sendFile(__dirname + '/views/pages/guide-signup.html');
 });
 
 // Let's facebook verify our app
@@ -159,6 +116,56 @@ app.post('/webhook', function(req, res) {
         res.sendStatus(200);
     }
 });
+
+
+function getProfile(id, callback) {
+    var ret;
+    request.get({
+        uri: 'https://graph.facebook.com/v2.6/' + id,
+        qs: {
+            fields: 'first_name, last_name, locale, timezone, gender',
+            access_token: process.env.page_token,
+        }
+    }, function (err, resp, profile) {
+        callback(JSON.parse(profile));
+    });
+}
+
+function send(recipientId, messageText) {
+	var messageData = {
+		recipient: {
+			id: recipientId
+		},
+		message: {
+			text: messageText
+		}
+	};
+
+    console.log('Calling send api');
+	callSendAPI(messageData);
+}
+
+function callSendAPI(messageData) {
+    request({
+        uri: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: { access_token: process.env.page_token },
+        method: 'POST',
+        json: messageData
+
+    }, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            var recipientId = body.recipient_id;
+            var messageId = body.message_id;
+
+            console.log("Successfully sent generic message with id %s to recipient %s", 
+            messageId, recipientId);
+        } else {
+            console.error("Unable to send message.");
+            console.error(response);
+            console.error(error);
+        }
+    });  
+}
 
 app.listen(app.get('port'), function() {
     console.log('Node app is running on port', app.get('port'));
