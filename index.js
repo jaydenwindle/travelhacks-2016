@@ -99,7 +99,9 @@ app.post('/webhook', function(req, res) {
                     message = messagingEvent.message.text;
                     atts = messagingEvent.attachments;
 
-                    var ai_req = ai.textRequest(message, {entities: ['fbid': id]}); 
+                    var ai_ent = ai.UserEntitiesRequest();
+                    console.log(ai_ent);
+                    var ai_req = ai.textRequest(message); 
                     console.log(ai_req);
 
                     ai_req.on('response', function(response) {
