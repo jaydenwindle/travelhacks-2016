@@ -107,8 +107,8 @@ app.post('/aihook', function (req, res) {
                         var newActivity = new controller.Activity({
                             guideId: profile.id,
                             name: result.parameters.name,
-                            loc: result.parameters.loc,
-                            date: result.parameters.date,
+                            loc: result.parameters.address,
+                            date: result.parameters.date-time,
                             city: guide[0].city
                         });
                         newActivity.save(function (err, activity) {
