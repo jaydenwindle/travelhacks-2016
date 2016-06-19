@@ -1,0 +1,87 @@
+.jk-tags {
+  margin: 1em 0;
+  width: 200px;
+  padding: 10px;
+  background: #F7F7F7;
+  list-style-type: none;
+  display: inline-block;
+  border: 5px solid #717F89;
+}
+.jk-tags li {
+  float: left;
+  height: 20px;
+  line-height: 18px;
+  position: relative;
+  margin: 0 0.3em 0.3em 0;
+}
+
+.jk-tags a {
+  background: #A4B79D;
+  color: #F7F7F7;
+  font-size: 12px;
+  font-size: 0.7rem;
+  text-decoration: none;
+
+  padding: 4px 6px;
+}
+.jk-tags a:after {
+  content: "";
+  float: right;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-left: 10px solid #A4B79D;
+  border-bottom: 10px solid transparent;
+}
+.jk-tags a:before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  right: 7px;
+  width: 3px;
+  height: 3px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
+  background: #F7F7F7;
+  -moz-box-shadow: -1px -1px 1px #424444;
+  -webkit-box-shadow: -1px -1px 1px #424444;
+  box-shadow: -1px -1px 1px #424444;
+}
+.jk-tags a:hover {
+  background: #FEDEA3;
+}
+.jk-tags a:hover:after {
+  border-color: transparent transparent transparent #FEDEA3;
+}
+/*---------*/
+.jk-tags .nactive a {
+  background: #87D387;
+}
+.jk-tags .nactive a:after {
+  border-color: transparent transparent transparent #87D387;
+}
+
+.tagged_text { margin-top:30px; }
+.tagmate-menu {
+  position:relative;
+  width: 400px;
+  background: #eee;
+  margin:20px 0;
+  z-index:1000;
+}
+.tagmate-menu-option {
+  display:block;
+  background: #EEE;
+  padding: 3px;
+  cursor:pointer;
+}
+.tagmate-menu-option:hover, .tagmate-menu-option-active {
+  background: lightblue;
+}
+.tagmate-hilite {
+  background: lightblue;
+}
+.tags { margin:0; padding:0; list-style:none; }
+.tags li { display:inline; list-style:none; cursor:pointer; }
+.bye { color:#fff; background:#c00; text-align:center; border-radius:24px; font-size:11px; display:inline-block; width:12px; height:12px; line-height:11px; cursor:pointer; }
