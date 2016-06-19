@@ -66,7 +66,7 @@ function callSendAPI(messageData) {
 
 // Home Page
 app.get('/', function(request, response) {
-    response.send("Welcome to Chiri");
+    res.sendFile('./views/pages/landing-page/landing.html');
 });
 
 // Let's facebook verify our app
