@@ -140,8 +140,9 @@ app.post('/aihook', function (req, res) {
                     console.log(activities);
                     if (activities.length > 0) {
                         result.fulfillment.speech = 'Guides recommend the following activities in ' + result.parameters.city + '\n\n';
-                        activities.forEach(function (act) {
+                        activities.forEach(function (act, i, arr) {
                             console.log(act);
+                            console.log(i);
                             result.fulfillment.speech += act.name + '\n' + 'Location: ' + act.address + '\n' + 'Time: ' + act.date + '\n\n';
                         });
                         res.json(result.fulfillment);
