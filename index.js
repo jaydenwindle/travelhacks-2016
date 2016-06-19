@@ -129,7 +129,7 @@ app.post('/webhook', function(req, res) {
                     });
 
                     ai_req.on('error', function(error) {
-                        console.log(error);
+                        console.log(error + "Ai error");
                     });
 
                     ai_req.end();
