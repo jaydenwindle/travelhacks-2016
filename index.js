@@ -101,7 +101,9 @@ var actions = {
     },
     merge(sessionId, context, entities, message, cb){
         getProfile(sessions[sessionId].id, function (profile) {
-            context.profile = profile;
+            context.firstName = profile.first_name;
+            context.lastName = profile.last_name;
+            context.gender = profile.gender;
             console.log(sessionId, context, entities, message);
             cb(context);
         })
