@@ -109,7 +109,7 @@ app.post('/aihook', function (req, res) {
                             name: result.parameters.name,
                             loc: result.parameters.loc,
                             date: result.parameters.date,
-                            city: guide.city
+                            city: guide[0].city
                         });
                         newActivity.save(function (err, activity) {
                             console.log(activity);
