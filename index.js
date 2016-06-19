@@ -55,7 +55,7 @@ app.post('/aihook', function (req, res) {
             result.paramaters.name = profile.user;
             controller.Guide.find({city: result.parameters['geo-city']}, function (err, users) {
                 console.log(users);
-                res.json(result.fulfillment);
+                res.json({});
             });
             break;
         case 'addTourGuide':
