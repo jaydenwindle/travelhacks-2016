@@ -35,6 +35,16 @@ app.get('/guide-signup', function (req, res) {
     res.sendFile(__dirname + '/views/pages/guide-signup.html');
 });
 
+app.get('/get-all-guides', function (req, res) {
+    controller.Guide.find(function(err, guides){
+        if (!err) {
+            res.json(guides);
+        } else {
+            res.send('No guides found');
+        }
+    });
+});
+
 // Let's facebook verify our app
 app.get('/webhook', function(req, res) {
     if (req.query['hub.mode'] === 'subscribe' &&
