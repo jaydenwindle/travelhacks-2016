@@ -81,6 +81,10 @@ app.get('/webhook', function(req, res) {
     }  
 });
 
+app.post('/aihook', function (req, res) {
+    console.log(req.body);
+});
+
 // Main message processing
 app.post('/webhook', function(req, res) {
     var data = req.body;
