@@ -11,7 +11,7 @@
 	Sections
 ------------------------*/
 section#landing {
-	background: url('../../img/landing/landing-bg.png');
+	/*background: url('../../img/landing/landing-bg.png');*/
 	background-size: cover;
 	background-position: center;
 }
