@@ -147,7 +147,7 @@ app.post('/aihook', function (req, res) {
                         res.json(result.fulfillment);
                     } else {
                         result.fulfillment.speech('No ativities found in ' + results.parameters.city);
-                        res.json{}
+                        res.json(result.fulfillment)
                     }
                 });
             } else {
