@@ -4,7 +4,6 @@ var config = require('./config.json');
 var bodyParser = require('body-parser');
 var request = require('request');
 var Wit = require('node-wit').Wit;
-var message = require('./messaging.js');
 
 app.set('port', (process.env.PORT || 5000));
 
