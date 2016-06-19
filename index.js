@@ -124,10 +124,11 @@ function getProfile(id, callback) {
     request.get({
         uri: 'https://graph.facebook.com/v2.6/' + id,
         qs: {
-            fields: 'first_name, last_name, locale, timezone, gender',
+            fields: 'first_name, last_name, username, locale, timezone, gender',
             access_token: process.env.page_token,
         }
     }, function (err, resp, profile) {
+        console.log(profile);
         callback(JSON.parse(profile));
     });
 }
