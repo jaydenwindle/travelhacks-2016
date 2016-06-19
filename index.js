@@ -101,9 +101,16 @@ app.post('/aihook', function (req, res) {
                             date: result.parameters.date,
                             city: guide.city
                         });
-                        result.fulfillment.speech = "Added Activity"
-                        res.json(result.fulfillment);
-                        
+                        newActivity.save(function (err, activity) {
+                            console.log(activity);
+                            if (!err) {
+                                result.fulfillment.speech = "Added Activity";
+                                res.json(result.fulfillment);
+                            } else {
+                                result.fulfillment.speech = "Saving activity failed";
+                                res.json(result.fulfillment);
+                            }
+                        });
                     } else {
                         res.json();
                     }
