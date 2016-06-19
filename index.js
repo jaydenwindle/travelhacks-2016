@@ -56,7 +56,7 @@ app.post('/aihook', function (req, res) {
             controller.Guide.find({city: result.parameters.city}, function (err, users) {
                 console.log(users);
                 result.fulfillment.speech = 'Your tour guide is ' + users[0].name + '.\n'+
-                'Get in touch with them by texting ' + users[0].user;
+                'Get in touch with them by texting ' + users[0].phone;
                 res.json(result.fulfillment);
             });
             break;
@@ -68,7 +68,7 @@ app.post('/aihook', function (req, res) {
                 var newGuide = new controller.Guide({
                     city: result.parameters.city, 
                     name: profile.name,
-                    user: result.parameters.user,
+                    phone: result.parameters['phone-number'],
                     guideId: profile.id
                 });
                 newGuide.save(function (err, guide) {
