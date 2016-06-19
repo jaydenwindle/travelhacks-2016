@@ -125,7 +125,6 @@ app.post('/webhook', function(req, res) {
 
 
                     ai_req.on('response', function(response) {
-                        console.log(ai_req);
                         console.log(response);
                         send(id, response.result.fulfillment.speech)
                     });
