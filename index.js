@@ -44,7 +44,6 @@ function getProfile(id, callback) {
             access_token: process.env.page_token,
         }
     }, function (err, resp, profile) {
-        console.log("getProfile: " + profile);
         callback(JSON.parse(profile));
     });
 }
@@ -82,8 +81,6 @@ function callSendAPI(messageData) {
             console.error(response);
             console.error(error);
         }
-    }, function (err, resp, body) {
-        console.log(body);
     });  
 }
 
