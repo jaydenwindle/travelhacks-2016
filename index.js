@@ -65,6 +65,10 @@ app.post('/aihook', function (req, res) {
                 var newGuide = new controller.Guide({city: result.parameters['geo-city'], userName: "Test"});
                 newGuide.save(function (err, guide) {
                     console.log(guide);
+                    if (!err) {
+                        result.fulfillment.speech = 'You are now a travel guide!'
+                        res.json(result.fulfillment);
+                    }
                 });
             }
             break;
