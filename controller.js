@@ -30,7 +30,17 @@ guideSchema = new Schema({
 });
 Guide = mongoose.model('Guide', guideSchema);
 
+activitySchema = new Schema({
+    guideId: Number,
+    name: String,
+    loc: Number,
+    city: String,
+    date: String
+});
+Activity = mongoose.model('Activity', guideSchema);
+
 module.exports = {
     User: User,
-    Guide: Guide
+    Guide: Guide,
+    Activity: Activity
 }
