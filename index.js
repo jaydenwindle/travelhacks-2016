@@ -137,7 +137,7 @@ app.post('/aihook', function (req, res) {
             if (!result.actionIncomplete) {
                 controller.Activity.find({city: result.parameters.city}, function (err, activities) {
                     console.log(activities);
-                    result.fulfillment.speech = 'Found the following events in ' + activities[0].city + '\n';
+                    result.fulfillment.speech = 'Guides recommend the following activities in ' + activities[0].city + '\n';
                     activities.forEach(function (act) {
                         result.fulfillment.speech += act.name + '\n' + 'Location: ' + act.loc + '\n' + 'Time: ' + act.date
                     });
