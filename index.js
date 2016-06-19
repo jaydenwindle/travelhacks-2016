@@ -52,7 +52,6 @@ app.post('/aihook', function (req, res) {
         case 'findTourGuide':
             console.log('findTourGuide');
             console.log(result);
-            result.paramaters.name = profile.user;
             controller.Guide.find({city: result.parameters.city}, function (err, users) {
                 console.log(users);
                 result.fulfillment.speech = 'Your tour guide is ' + users[0].name + '.\n'+
